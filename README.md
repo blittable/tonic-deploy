@@ -1,6 +1,6 @@
-# Tonic-Deploy 
+# Tonic-Perf
 
-Perf Testing Tonic.
+Performance Testing Tonic - WIP 
 
 [Tonic](https://github.com/hyperium/tonic) 
 
