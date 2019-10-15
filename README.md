@@ -13,7 +13,14 @@ A normal workflow for grpc/tonic deployments:
 
 The sub-directories here contain samples supporting that process, specifically for testing tonic.
 
-## Rustwide-Build 
+## Directories
+### Hello-Tonic
+
+A simple client/server test of tonic can be found in client_and_server.rs and run with: `cargo run --bin hellotonic-pair`
+
+### Rustwide-Build 
+
+This directory is an experiment aimed at getting a consistent baseline environment with some configurable paraemters.
 
 [Rustwide](https://github.com/rust-lang/rustwide) is a baseline environment for building Rust crates/projects. It is used by the 
 rust-doc project as well as Crater, a testing framework for the Rust crate eco-system.  
