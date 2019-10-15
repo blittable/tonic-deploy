@@ -1,0 +1,36 @@
+[package]
+name = "rustwide-build"
+version = "0.1.0"
+authors = ["blittable <blittable-bits@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "rustwide_pair"
+path ="rustwide_pair_build_and_run.rs"
+
+[[bin]]
+name = "rustwide_server"
+path ="rustwide_server_build_and_run.rs"
+
+[[bin]]
+name = "rustwide_client"
+path ="rustwide_client_build_and_run.rs"
+
+[package.metadata.docs.rs]
+features = ["unstable"]
+
+[features]
+unstable = []
+
+[dependencies]
+rustwide = "0.3.2"
+env_logger = "0.6.1"
+log = "0.4.6"
+failure = "0.1.3"
+
+[dev-dependencies]
+
+[build-dependencies]
+rustwide = "0.3.2"
+env_logger = "0.6.1"
+log = "0.4.6"

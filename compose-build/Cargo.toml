@@ -1,0 +1,44 @@
+[package]
+name = "hello-tonic"
+version = "0.1.0"
+authors = ["blittable <blittable-bits@gmail.com>"]
+edition = "2018"
+
+#define as workspace or root directory build will start some client/servers 
+[workspace]
+
+[[bin]]
+name = "hellotonic-server"
+path = "src/hellotonic/server.rs"
+
+[[bin]]
+name = "hellotonic-client"
+path = "src/hellotonic/client.rs"
+
+[dependencies]
+tonic = { git = "https://github.com/hyperium/tonic" }
+bytes = "0.4"
+prost = "0.5"
+log = "0.4.0"
+env_logger = "0.7.0"
+
+tokio = "=0.2.0-alpha.6"
+futures-preview = { version = "=0.3.0-alpha.19", default-features = false, features = ["alloc"]}
+async-stream = "0.1.2"
+http = "0.1"
+tower = "=0.3.0-alpha.2"
+
+
+[build-dependencies]
+tonic-build = { git = "https://github.com/hyperium/tonic" }
+log = "0.4.0"
+env_logger = "0.7.0"
+
+[features]
+default = ["transport", "rustfmt"]
+rustfmt = []
+transport = []
+
+[package.metadata.docs.rs]
+all-features = true
+

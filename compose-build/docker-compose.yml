@@ -1,0 +1,13 @@
+version: '2.1'
+
+services:
+  tonic-server:
+    image: tonic-builder/tonic-server:latest
+    build: src/hellotonic 
+    ports:
+      - "2379"
+    volumes:
+      - ./data:/data
+    command:
+      - --name=pd0
+    restart: on-failure
