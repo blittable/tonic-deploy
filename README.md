@@ -11,7 +11,7 @@ A normal workflow for grpc/tonic deployments:
     2) build the source code,
     3) deploy the application components to 1 or more hosts 
 
-The sub-directories here contain samples supporting that process. 
+The sub-directories here contain samples supporting that process, specifically for testing tonic.
 
 ## Rustwide-Build 
 
