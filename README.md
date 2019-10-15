@@ -27,6 +27,16 @@ Using rustwide for building let's us:
 
 There's some overlap with what `cargo build` and a typical CI/CD process do, so, if used, it needs to be crafted to fit your specific workflow.  One useful scenario: spin up the sandboxed-tonic environment with constraints (e.g. memory) on the container to faciliate performance testing.
 
+
+To pull the rustwide image, install a beta toolchain, install the `rustfmt` dependency of tonic, build a sandboxed image, then test by spawning a server on a separate thread and sending 1000 requests: 
+
+```rust 
+cargo run --bin rustwide_pair    
+```
+Notes - this pulls the rust baseline build image and an index of crates the first invocation. It will be slow.  
+
+And, obviously, it's not a distributed test.
+
 ## Docker-Compose 
 
 WIP
