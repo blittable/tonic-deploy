@@ -33,9 +33,11 @@ To pull the rustwide image, install a beta toolchain, install the `rustfmt` depe
 ```rust 
 cargo run --bin rustwide_pair    
 ```
-Notes - this pulls the rust baseline build image and an index of crates the first invocation. It will be slow.  
+Notes - 
 
-And, obviously, it's not a distributed test.
+1 - this pulls the rust baseline build image and an index of crates the first invocation. It will be slow.  
+2 - obviously, it's not a distributed test.
+3 - the code it runs can be run indpendent of rustwide from the hello-tonic directory
 
 ## Docker-Compose 
 
