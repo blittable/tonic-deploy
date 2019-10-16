@@ -3,7 +3,7 @@ pub mod hellotonic {
 }
 
 use std::{collections::VecDeque, net::SocketAddr};
-use tonic::{transport::Server, Request, Response, Status, Streaming};
+use tonic::{transport::Server, Request, Response, Status };
 use tokio::sync::mpsc;
 
 use hellotonic::{
@@ -21,7 +21,7 @@ impl hellotonic::server::Greeter for MyGreeter {
         &self,
         request: Request<HelloRequest>,
     ) -> Result<Response<HelloReply>, Status> {
-        println!("Got a request: {:?}", request);
+        println!("Got a request 5-6: {:?}", request);
 
         let reply = hellotonic::HelloReply {
             message: "Zomg, it works!".into(),
@@ -31,14 +31,11 @@ impl hellotonic::server::Greeter for MyGreeter {
     }
 }
 
-type EchoResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<HelloReply, Status>>;
-
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
-    let addrs = ["[::1]:50003", "[::1]:50004"];
+    let addrs = ["192.168.1.14:50005", "192.168.1.14:50006"];
+    //let addrs = ["192.168.1.14:50003", "192.168.1.14:50004", "192.168.1.14:50005", "192.168.1.14:50006"];
 
     let (tx, mut rx) = mpsc::unbounded_channel();
 
