@@ -24,8 +24,6 @@ impl Greeter for MyGreeter {
 
         let string = &self.data;
 
-        println!("My data: {:?}", string);
-
         let reply = hello_tonic::HelloReply {
             message: "Zomg, it works!".into(),
         };

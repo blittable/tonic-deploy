@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 
 services:
   tonic-server:
@@ -8,6 +8,3 @@ services:
       - "2379"
     volumes:
       - ./data:/data
-    command:
-      - --name=pd0
-    restart: on-failure

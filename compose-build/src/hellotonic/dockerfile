@@ -1,11 +1,22 @@
 FROM rustops/crates-build-env
 
-# Install the packages contained in `packages.txt`
-#COPY packages.txt /opt/crates-build-env/packages.txt
-#RUN apt-get update && cat /opt/crates-build-env/packages.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get install -y
+# Copy tonic-perf sources
+RUN mkdir -p /tmp/tonic-perf
+COPY src/hellotonic/Cargo.toml src/hellotonic/Cargo.lock /tmp/tonic-perf/
+WORKDIR /tmp
+WORKDIR /tmp/tonic-perf
+RUN cargo fetch
+RUN mkdir -p /tmp/tonic-perf/src && echo 'fn main() {}' >> /tmp/tonic-perf/src/server.rs && echo 'fn main() {}' >> /tmp/ballista/src/client.rs
+COPY proto /tmp/tonic-perf/proto/
+COPY build.rs /tmp/tonic-perf/
+RUN cargo build --release  
+
+COPY src/ /tmp/tonic-perf/src/
+RUN cargo build --release 
 
 # Setup the entrypoint
 COPY entrypoint.sh /opt/crates-build-env/entrypoint.sh
+
 ENTRYPOINT ["/opt/crates-build-env/entrypoint.sh"]
 
 CMD ["bash"]
