@@ -1,4 +1,5 @@
 use log::info;
+use std::time::Instant;
 
 pub mod hello_tonic {
     tonic::include_proto!("hellotonic");
@@ -12,14 +13,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut client = GreeterClient::connect("http://0.0.0.0:50003")?;
 
-    let request = tonic::Request::new(HelloRequest {
-        name: "hello".into(),
-        iteration: 0,
-    });
+    let start = Instant::now();
+    let iterations: i16 = 1000;
 
-    let response = client.say_hello(request).await?;
+    for i in 0..iterations {
 
-    println!("RESPONSE={:?}", response);
+        let request = tonic::Request::new(HelloRequest {
+            name: "world".into(),
+            iteration: 1,
+        });
+
+        client.say_hello(request).await;
+    }
+
+    let duration = start.elapsed();
+    println!(
+        "Time elapsed for {:?} requests was: {:?}",
+        iterations, duration
+    );
 
     Ok(())
 }

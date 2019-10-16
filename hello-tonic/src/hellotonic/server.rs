@@ -14,19 +14,21 @@ pub struct MyGreeter {
     data: String,
 }
 
+pub struct Bucket {
+    data: Vec<String>
+}
+
 #[tonic::async_trait]
 impl Greeter for MyGreeter {
     async fn say_hello(
         &self,
         request: Request<HelloRequest>,
     ) -> Result<Response<HelloReply>, Status> {
-        println!("Got a request: {:?}", request);
-
-        let string = &self.data;
 
         let reply = hello_tonic::HelloReply {
-            message: "Zomg, it works!".into(),
+            message: "Hello".into(),
         };
+
         Ok(Response::new(reply))
     }
 }
@@ -41,7 +43,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await?;
 
     println!("Server Started");
-    eprintln!("Server Started");
 
     Ok(())
 }

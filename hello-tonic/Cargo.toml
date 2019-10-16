@@ -64,3 +64,6 @@ transport = []
 [package.metadata.docs.rs]
 all-features = true
 
+[profile.release]
+debug = true
+
