@@ -1,4 +1,4 @@
-pub mod hello_tonic {
+pub mod hellotonic {
     tonic::include_proto!("hellotonic");
 }
 
@@ -6,8 +6,7 @@ use std::{collections::VecDeque, net::SocketAddr};
 use tonic::{transport::Server, Request, Response, Status, Streaming};
 use tokio::sync::mpsc;
 
-use hello_tonic::{
-    server::{Greeter, GreeterServer},
+use hellotonic::{
     HelloReply, HelloRequest,
 };
 
@@ -17,16 +16,17 @@ pub struct MyGreeter {
 }
 
 #[tonic::async_trait]
-impl Greeter for MyGreeter {
+impl hellotonic::server::Greeter for MyGreeter {
     async fn say_hello(
         &self,
         request: Request<HelloRequest>,
     ) -> Result<Response<HelloReply>, Status> {
         println!("Got a request: {:?}", request);
 
-        let reply = hello_tonic::HelloReply {
+        let reply = hellotonic::HelloReply {
             message: "Zomg, it works!".into(),
         };
+
         Ok(Response::new(reply))
     }
 }
@@ -47,7 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let mut tx = tx.clone();
 
         let server = MyGreeter { addr };
-        let serve = Server::builder().serve(addr, MyGreeter::new(server));
+        let serve = Server::builder().serve(addr, hellotonic::server::GreeterServer::new(server));
 
         tokio::spawn(async move {
             if let Err(e) = serve.await {
