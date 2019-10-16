@@ -8,7 +8,6 @@ pub mod hello_tonic {
     tonic::include_proto!("hellotonic");
 }
 
-
 use hello_tonic::{
     server::{Greeter, GreeterServer},
     HelloReply, HelloRequest,
@@ -63,7 +62,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             .serve(addr, GreeterServer::new(greeter))
             .await;
     });
-
 
     let mut client = GreeterClient::connect("http://[::0]:50003")?;
 

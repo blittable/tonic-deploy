@@ -27,7 +27,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut client = GreeterClient::new(channel);
 
 
-
     for i in 0..iterations {
 
         let request = tonic::Request::new(HelloRequest {
