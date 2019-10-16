@@ -77,9 +77,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         });
 
         let response = client.say_hello(request).await?;
-
         if i % 100 == 0 {
-            //info!("CLIENT_RECEIVED_RESPONSE: {:?}", response);
+            info!("CLIENT_RECEIVED_RESPONSE: {:?}", response);
         }
     }
 

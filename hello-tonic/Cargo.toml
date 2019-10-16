@@ -21,6 +21,15 @@ path = "src/hellotonic/client.rs"
 name = "hellotonic-pair"
 path = "src/hellotonic/client_and_server.rs"
 
+[[bin]]
+name = "hello-load-balance-client"
+path = "src/hello-load-balance/client.rs"
+
+[[bin]]
+name = "hello-load-balance-server"
+path = "src/hello-load-balance/server.rs"
+
+
 [dependencies]
 tonic = { git = "https://github.com/hyperium/tonic" }
 bytes = "0.4"
@@ -35,7 +44,7 @@ async-stream = "0.1.2"
 http = "0.1"
 tower = "=0.3.0-alpha.2"
 tracing-futures = { git = "https://github.com/tokio-rs/tracing" }
-tracing = "0.1.5"
+tracing = "0.1"
 tracing-attributes = "0.1.4"
 tracing-subscriber = { git = "https://github.com/tokio-rs/tracing" }
 
