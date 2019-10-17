@@ -29,6 +29,8 @@ impl Greeter for MyGreeter {
             message: "Hello".into(),
         };
 
+        println!("Responding");
+
         Ok(Response::new(reply))
     }
 }

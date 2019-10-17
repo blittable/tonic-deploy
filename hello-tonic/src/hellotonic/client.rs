@@ -1,28 +1,40 @@
 use log::info;
+use std::sync::{Arc, Mutex};
+use std::thread;
 use std::time::Instant;
 
 pub mod hello_tonic {
     tonic::include_proto!("hellotonic");
 }
 
-use hello_tonic::{client::GreeterClient, HelloRequest};
+use hello_tonic::{client::GreeterClient, HelloReply, HelloRequest};
 
 async fn run_requests<T>(iterations: i32, f: T) -> Result<(), Box<dyn std::error::Error>>
 where
     T: Fn(String),
 {
-    for i in 0..iterations {
-        let mut client = GreeterClient::connect("http://0.0.0.0:50003")?;
+    //let responses = Arc::new(Mutex::new(Vec::<HelloReply>::new()));
+    //let responses = Arc::clone(&responses);
 
-        tokio::spawn(async move {
+    let mut client = GreeterClient::connect("http://0.0.0.0:50003")?;
+
+    tokio::spawn(async move {
+        for _ in 0..100000_i32 {
             let request = tonic::Request::new(HelloRequest {
                 name: "world".into(),
                 iteration: 1,
             });
 
-            let result = client.say_hello(request).await;
-        });
-    }
+            let resp = match client.say_hello(request).await {
+                Ok(resp) => println!("{:?}", resp.into_inner().message),
+                Err(e) => {
+                    println!("failed to read from socket; err = {:?}", e);
+                }
+            };
+
+            resp
+        }
+    });
 
     Ok(())
 }
@@ -34,9 +46,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let iterations: i32 = 1000;
     let start = Instant::now();
 
-    let output = |x: String| println!("message: {:?}", x);
+    let output = move |x| println!("message: {:?}", x);
 
-    run_requests(iterations, output).await;
+    let result = run_requests(iterations, output).await;
 
     let duration = start.elapsed();
 
