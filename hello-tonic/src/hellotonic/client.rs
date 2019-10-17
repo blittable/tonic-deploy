@@ -18,8 +18,8 @@ where
 
     let mut client = GreeterClient::connect("http://0.0.0.0:50003")?;
 
-    tokio::spawn(async move {
-        for _ in 0..100000_i32 {
+    // tokio::spawn(async move {  <- Crazy fast
+        for _ in 0..1000_i32 {
             let request = tonic::Request::new(HelloRequest {
                 name: "world".into(),
                 iteration: 1,
@@ -28,13 +28,11 @@ where
             let resp = match client.say_hello(request).await {
                 Ok(resp) => println!("{:?}", resp.into_inner().message),
                 Err(e) => {
-                    println!("failed to read from socket; err = {:?}", e);
+                    println!("Errant response; err = {:?}", e);
                 }
             };
-
-            resp
         }
-    });
+    //});
 
     Ok(())
 }
