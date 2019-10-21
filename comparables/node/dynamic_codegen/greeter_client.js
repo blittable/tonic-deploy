@@ -35,12 +35,9 @@ var hello_proto = grpc.loadPackageDefinition(packageDefinition).hellotonic;
 function main() {
   var client = new hello_proto.Greeter('localhost:50003',
     grpc.credentials.createInsecure());
-  var user;
-  if (process.argv.length >= 3) {
-    user = process.argv[2];
-  } else {
-    user = 'world';
-  }
+  var request;
+  name = 'world';
+  
 
   var i;
 
@@ -52,8 +49,8 @@ function main() {
   };
 
 
-  for (i = 0; i < 1000; i++) {
-    client.sayHello({ name: user }, function (err, response) {
+  for (i = 0; i < 5000; i++) {
+    client.sayHello({ name: name}, function (err, response) {
       console.log('Greeting:', response.message);
     },
     end);

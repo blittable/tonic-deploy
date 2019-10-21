@@ -1,7 +1,13 @@
+use futures::future;
+use futures::future::FutureExt;
+use futures::prelude::*;
+use futures::stream::FuturesUnordered;
 use log::info;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::thread;
 use std::time::Instant;
+use tokio::sync::{mpsc, Mutex};
+use tonic::Response;
 
 pub mod hello_tonic {
     tonic::include_proto!("hellotonic");
@@ -9,44 +15,34 @@ pub mod hello_tonic {
 
 use hello_tonic::{client::GreeterClient, HelloReply, HelloRequest};
 
-async fn run_requests<T>(iterations: i32, f: T) -> Result<(), Box<dyn std::error::Error>>
-where
-    T: Fn(String),
-{
-    //let responses = Arc::new(Mutex::new(Vec::<HelloReply>::new()));
-    //let responses = Arc::clone(&responses);
 
-    let mut client = GreeterClient::connect("http://0.0.0.0:50003")?;
-
-    // tokio::spawn(async move {  <- Crazy fast
-        for _ in 0..1000_i32 {
-            let request = tonic::Request::new(HelloRequest {
-                name: "world".into(),
-                iteration: 1,
-            });
-
-            let resp = match client.say_hello(request).await {
-                Ok(resp) => println!("{:?}", resp.into_inner().message),
-                Err(e) => {
-                    println!("Errant response; err = {:?}", e);
-                }
-            };
-        }
-    //});
-
-    Ok(())
-}
-
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    info!("Starting greeter client");
-
-    let iterations: i32 = 1000;
+async fn bench() -> Result<(), Box<dyn std::error::Error>> {
     let start = Instant::now();
 
-    let output = move |x| println!("message: {:?}", x);
+    let iterations = 5000;
 
-    let result = run_requests(iterations, output).await;
+    let client = GreeterClient::connect("http://127.0.0.1:50003")?;
+
+    let mut futures = FuturesUnordered::new();
+
+    for i in 0..iterations {
+        let request = tonic::Request::new(HelloRequest {
+            name: "world".into(),
+            iteration: i,
+        });
+
+        let mut client = client.clone();
+        futures.push(async move { client.say_hello(request).await });
+    }
+
+    while let Some(res) = futures.next().await {
+        match res {
+            Ok(resp) => println!("{:?}", resp.into_inner().message),
+            Err(e) => {
+                println!("Errant response; err = {:?}", e);
+            }
+        }
+    }
 
     let duration = start.elapsed();
 
@@ -55,5 +51,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         iterations, duration
     );
 
+    Ok(())
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    bench().await?;
     Ok(())
 }
