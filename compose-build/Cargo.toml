@@ -18,7 +18,7 @@ path = "src/hellotonic/client.rs"
 [dependencies]
 tonic = { git = "https://github.com/hyperium/tonic" }
 bytes = "0.4"
-prost = "0.5"
+prost = "0.6"
 log = "0.4.0"
 env_logger = "0.7.0"
 
